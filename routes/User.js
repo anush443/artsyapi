@@ -15,8 +15,8 @@ router.put("/:id", verifyTokenAndAuthorization, (req, res) => {
     ).toString();
   }
 
-  const query = `UPDATE userlogin SET email = '${req.body.email}'where id=${req.params.id};`;
-
+  const query = `UPDATE userlogin SET email = '${req.body.email}' where id=${req.params.id};`;
+  console.log(req.body.email);
   connection.query(query, (err) => {
     if (err) return res.status(500).json(err);
     else return res.send("Updated Succefully...");

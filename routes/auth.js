@@ -19,9 +19,10 @@ router.post("/register", (req, res) => {
     else if (result[0]) {
       return res.json({ message: "User Already Registered. Please Login." });
     }
+
     //creating new user
     query = `INSERT INTO Userlogin(email,password) VALUES('${user.email}','${user.password}');`;
-    console.log(query);
+    //console.log(query);
     connection.query(query, (err) => {
       if (err) return res.json({ error: err });
       return res.json({ message: "Successfully Registered new user" });
