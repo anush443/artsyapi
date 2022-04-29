@@ -10,7 +10,7 @@ router.post("/", verifyToken, (req, res) => {
   };
   let price = 0;
   let query = `SELECT PRICE FROM ArtworkInformation WHERE id ='${cart.art_id}'`;
-
+  //console.log(query);
   connection.query(query, (err, result) => {
     if (err) res.status(500).json(err);
     else {
@@ -28,18 +28,17 @@ router.post("/", verifyToken, (req, res) => {
 
 //update cart with userid
 router.put("/update/:id", verifyTokenAndAuthorization, (req, res) => {
-  const user_id = req.params.id;
   let price = 0;
   let query = `SELECT PRICE FROM ArtworkInformation WHERE id ='${req.body.art_id}'`;
   connection.query(query, (err, result) => {
     if (err) res.status(500).json(err);
     else {
       price = result[0].PRICE;
-      console.log(price);
+      //console.log(price);
       query = `UPDATE cart set quantity = ${req.body.quantity},total_price = ${
         req.body.quantity * price
-      } where art_id = '${req.body.art_id}' and userid = ${user_id} `;
-      console.log(query);
+      } where art_id = '${req.body.art_id}' and userid = ${req.params.id} `;
+      //console.log(query);
       connection.query(query, (err) => {
         if (err) res.status(500).json(err);
         else res.status(200).json("Cart updated");
@@ -50,7 +49,7 @@ router.put("/update/:id", verifyTokenAndAuthorization, (req, res) => {
 
 //delete cart
 router.delete("/delete/:id", verifyTokenAndAuthorization, (req, res) => {
-  const query = `DELETE FROM CART WHERE userid = ${req.user.id}`;
+  const query = `DELETE FROM CART WHERE userid = ${req.params.id}`;
   connection.query(query, (err) => {
     if (err) res.status(500).json(err);
     else res.status(200).json("Deleted cart...");
@@ -59,11 +58,11 @@ router.delete("/delete/:id", verifyTokenAndAuthorization, (req, res) => {
 
 //get user cart
 
-router.get("/", verifyToken, (req, res) => {
-  const query = `SELECT * FROM CART WHERE userid = ${req.user.id};`;
-  connection.query(query, (err, result) => {
+router.get("/:id", verifyTokenAndAuthorization, (req, res) => {
+  const query = `SELECT * FROM CART WHERE userid = ${req.params.id};`;
+  connection.query(query, (err, cart) => {
     if (err) res.status(500).json(err);
-    else res.status(200).json(result);
+    else res.status(200).json(cart);
   });
 });
 
