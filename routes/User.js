@@ -3,19 +3,21 @@ const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } = require("./verifytoken");
+const CryptoJS = require("crypto-js");
 
 const router = require("express").Router();
 
 //update
 router.put("/:id", verifyTokenAndAuthorization, (req, res) => {
-  if (req.body.password) {
-    req.body.password = CryptoJS.AES.encrypt(
-      req.body.password,
-      process.env.CRYPTO_KEY
-    ).toString();
-  }
+  const updatedpassword = CryptoJS.AES.encrypt(
+    req.body.password,
+    process.env.CRYPTO_KEY
+  ).toString();
 
-  const query = `UPDATE userlogin SET email = '${req.body.email}' where id=${req.params.id};`;
+  console.log("updating....");
+  console.log(typeof req.params.id);
+  const query = `UPDATE userlogin SET password = '${updatedpassword}' where id=${req.params.id};`;
+  //
   //console.log(req.body.email);
   connection.query(query, (err) => {
     if (err) return res.status(500).json(err);

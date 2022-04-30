@@ -35,9 +35,8 @@ router.post("/login", (req, res) => {
   const query = `SELECT  id,email,password,isAdmin FROM Userlogin where email = '${req.body.email}';`;
 
   connection.query(query, (err, user) => {
-    if (err) return res.json({ error: err });
-    else if (!user[0])
-      return res.status(400).json({ message: "plase regeister first" });
+    if (err) return console.log(err);
+    else if (!user[0]) return res.json({ message: "please register first" });
 
     //decrypting org pass
     const orginalPass = CryptoJS.AES.decrypt(
@@ -46,7 +45,7 @@ router.post("/login", (req, res) => {
     ).toString(CryptoJS.enc.Utf8);
 
     if (orginalPass != req.body.password)
-      return res.status(401).json({ message: "Incorrect Password" });
+      return res.json({ message: "Incorrect Password" });
     else {
       const accessToken = jwt.sign(
         {
@@ -56,8 +55,10 @@ router.post("/login", (req, res) => {
         process.env.JWT_SEC,
         { expiresIn: "3d" }
       );
+
       const { password, ...others } = user[0];
-      return res.status(200).json({ ...others, accessToken });
+
+      return res.status(200).json({ ...others, accessToken, expiresIn: "3d" });
     }
   });
 });
