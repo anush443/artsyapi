@@ -6,23 +6,25 @@ const jwt = require("jsonwebtoken");
 router.post("/register", (req, res) => {
   const user = {
     email: req.body.email,
+    userName: req.body.userName,
     password: CryptoJS.AES.encrypt(
       req.body.password,
       process.env.CRYPTO_KEY
     ).toString(),
   };
-
-  //checking if user already exists
+  //console.log(user);
+  //checking uf user already exists
   let query = `SELECT email FROM userlogin where email ='${user.email}';`;
   connection.query(query, (err, result) => {
     if (err) return res.json({ error: err });
     else if (result[0]) {
+      console.log("ds");
       return res.json({ message: "User Already Registered. Please Login." });
     }
 
     //creating new user
-    query = `INSERT INTO Userlogin(email,password) VALUES('${user.email}','${user.password}');`;
-    //console.log(query);
+    query = `INSERT INTO Userlogin(email,username,password) VALUES('${user.email}','${user.userName}','${user.password}');`;
+    console.log(query);
     connection.query(query, (err) => {
       if (err) return res.json({ error: err });
       return res.json({ message: "Successfully Registered new user" });
@@ -32,7 +34,7 @@ router.post("/register", (req, res) => {
 
 //login
 router.post("/login", (req, res) => {
-  const query = `SELECT  id,email,password,isAdmin FROM Userlogin where email = '${req.body.email}';`;
+  const query = `SELECT  * FROM Userlogin where email = '${req.body.email}';`;
 
   connection.query(query, (err, user) => {
     if (err) return console.log(err);
@@ -53,12 +55,14 @@ router.post("/login", (req, res) => {
           isAdmin: user[0].isAdmin,
         },
         process.env.JWT_SEC,
-        { expiresIn: "3d" }
+        { expiresIn: "259200" } //3days in seconds
       );
 
       const { password, ...others } = user[0];
 
-      return res.status(200).json({ ...others, accessToken, expiresIn: "3d" });
+      return res
+        .status(200)
+        .json({ ...others, accessToken, expiresIn: "259200" });
     }
   });
 });

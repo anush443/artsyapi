@@ -4,24 +4,23 @@ const router = require("express").Router();
 
 router.post("/", verifyToken, (req, res) => {
   const cart = {
-    userid: req.user.id,
+    userid: req.body.userid,
     art_id: req.body.art_id,
+    price: req.body.price,
     quantity: req.body.quantity,
   };
-  let price = 0;
-  let query = `SELECT PRICE FROM ArtworkInformation WHERE id ='${cart.art_id}'`;
+  //console.log(cart);
   //console.log(query);
-  connection.query(query, (err, result) => {
-    if (err) res.status(500).json(err);
+
+  const query = `INSERT INTO cart(userid,art_id,quantity,total_price) VALUES(${
+    cart.userid
+  },'${cart.art_id}',${cart.quantity},${cart.price * cart.quantity})`;
+  //console.log(query);
+  connection.query(query, (err) => {
+    if (err) res.sendStatus(500).json(err);
     else {
-      price = result[0].PRICE;
-      query = `INSERT INTO CART(userid,art_id,quantity,total_price) VALUES(${
-        cart.userid
-      },'${cart.art_id}',${cart.quantity},${price * cart.quantity})`;
-      connection.query(query, (err, result) => {
-        if (err) res.status(500).json(err);
-        else res.status(200).json("Added to cart");
-      });
+      console.log("Added to cart");
+      return;
     }
   });
 });
@@ -49,10 +48,14 @@ router.put("/update/:id", verifyTokenAndAuthorization, (req, res) => {
 
 //delete cart
 router.delete("/delete/:id", verifyTokenAndAuthorization, (req, res) => {
-  const query = `DELETE FROM CART WHERE userid = ${req.params.id}`;
+  console.log("yes");
+  const query = `DELETE FROM cart WHERE userid = ${req.params.id} and art_id = '${req.body.art_id}';`;
+  console.log(query);
   connection.query(query, (err) => {
     if (err) res.status(500).json(err);
-    else res.status(200).json("Deleted cart...");
+    else console.log("Delete from cart...");
+    return;
+    // res.status(200).json("Deleted cart...");
   });
 });
 
