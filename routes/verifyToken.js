@@ -12,11 +12,14 @@ const verifyToken = (req, res, next) => {
         return res.status(403).json("Token is not valid!");
       }
       //console.log(user);
-      else req.user = user;
+      else {
+        req.user = user;
+        //console.log(user);
+      }
       next();
     });
   } else {
-    console.log("this");
+    //console.log("this");
     return res.status(401).json("You are not authenticated!");
   }
 };

@@ -122,7 +122,7 @@ router.put("/update/:id", verifyTokenAndAdmin, (req, res) => {
       .join(", ") +
     ` WHERE id = '${req.params.id}';`;
   //console.log(query);
-
+  console.log(query);
   connection.query(query, (err) => {
     if (err) return res.status(500).json(err);
     else res.status(200).json("Artwork updated...");
