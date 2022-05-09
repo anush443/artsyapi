@@ -7,6 +7,7 @@ const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
 const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
+const exhibitionRoute = require("./routes/exhibition");
 
 global.connection = mysql.createConnection({
   host: process.env.HOST,
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/artworks", productRoute);
+app.use("/api/exhibitions", exhibitionRoute);
 app.use("/api/cart", cartRoute);
 
 // app.get("/api/users/user", (req, res) => {

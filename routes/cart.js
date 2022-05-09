@@ -18,10 +18,7 @@ router.post("/", verifyToken, (req, res) => {
   //console.log(query);
   connection.query(query, (err) => {
     if (err) res.sendStatus(500).json(err);
-    else {
-      console.log("Added to cart");
-      return;
-    }
+    else return;
   });
 });
 
@@ -52,8 +49,8 @@ router.delete("/delete/:id", verifyTokenAndAuthorization, (req, res) => {
   const query = `DELETE FROM cart WHERE userid = ${req.params.id} and art_id = '${req.body.art_id}';`;
   console.log(query);
   connection.query(query, (err) => {
-    if (err) res.status(500).json(err);
-    else console.log("Delete from cart...");
+    if (err) return res.status(500).json(err);
+    else console.log("Deleted from cart...");
     return;
     // res.status(200).json("Deleted cart...");
   });

@@ -55,7 +55,7 @@ router.post("/login", (req, res) => {
           isAdmin: user[0].isAdmin,
         },
         process.env.JWT_SEC,
-        { expiresIn: "259200" } //3days in seconds
+        { expiresIn: "3d" } //3days in seconds
       );
 
       const { password, ...others } = user[0];

@@ -16,7 +16,7 @@ router.post("/addartwork", verifyTokenAndAdmin, (req, res) => {
 
   const query = `INSERT INTO ArtworkInformation(id,price,category,img,art_description,size,title,artist_id) VALUES
   ('${newArtwork.id}',${newArtwork.price},'${newArtwork.category}','${newArtwork.img}','${newArtwork.description}','${newArtwork.size}','${newArtwork.title}',${newArtwork.artist_id});`;
-
+  console.log(query);
   connection.query(query, (err) => {
     if (err) res.status(500).json(err);
     else res.status(200).json("New Artwork added...");
