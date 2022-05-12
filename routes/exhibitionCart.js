@@ -28,4 +28,13 @@ router.put("/update/:id", verifyTokenAndAuthorization, (req, res) => {
   });
 });
 
+router.delete("/delete/:id", verifyTokenAndAuthorization, (req, res) => {
+  const query = `Delete from ExhibitionCart where userid = ${req.params.id} and exhi_id = ${req.body.exhi_id};r`;
+  //console.log(query);
+  connection.query(query, (err) => {
+    if (err) return res.status(500).json(err);
+    else return res.status(200).json("Deleted from exhibition cart....");
+  });
+});
+
 module.exports = router;

@@ -101,9 +101,24 @@ router.get("/allartists", verifyTokenAndAdmin, (req, res) => {
   });
 });
 
+//update artist
+router.put("/updateartist/:artist_id", verifyTokenAndAdmin, (req, res) => {
+  const sql = `UPDATE ArtistInformation SET artist_name='${req.body.name}',email = '${req.body.email}',phone = '${req.body.phone}' WHERE artist_id='${req.params.artist_id}'`;
+  // const sql=`UPDATE ArtistInformation SET artist_name= "james Bond",email = "james@gmail.com",phone = "23455533344" WHERE artist_id="1"`;
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    res.send("Artist Information Added Successfully ...");
+    console.log(result);
+    // if (err) res.status(500).json(err);
+    // else res.send(result);
+  });
+});
+
 //delete artist
 router.delete("/delete/artist/:id", verifyTokenAndAdmin, (req, res) => {
-  const query = `DELETE FROM ArtistInformation WHERE artist_id = '${req.params.id}';`;
+  const artistId = +req.params.id;
+  const query = `DELETE FROM ArtistInformation WHERE artist_id = '${artistId}';`;
+  console.log(query);
   connection.query(query, (err) => {
     if (err) res.status(500).json(err);
     else res.status(500).json("Deleted Artist successfully....");
@@ -113,7 +128,7 @@ router.delete("/delete/artist/:id", verifyTokenAndAdmin, (req, res) => {
 //update artwork
 router.put("/update/:id", verifyTokenAndAdmin, (req, res) => {
   const update = req.body;
-  // console.log(update);
+  console.log(update);
   //console.log(update.category);
   const query =
     `Update ArtworkInformation SET ` +
@@ -121,7 +136,7 @@ router.put("/update/:id", verifyTokenAndAdmin, (req, res) => {
       .map((key) => `${key} = '${update[`${key}`]}'`)
       .join(", ") +
     ` WHERE id = '${req.params.id}';`;
-  //console.log(query);
+  console.log(query);
   console.log(query);
   connection.query(query, (err) => {
     if (err) return res.status(500).json(err);
@@ -132,6 +147,7 @@ router.put("/update/:id", verifyTokenAndAdmin, (req, res) => {
 //delete artwork
 router.delete("/delete/:id", verifyTokenAndAdmin, (req, res) => {
   const query = `DELETE FROM ArtworkInformation WHERE id = '${req.params.id}';`;
+  //console.log(query);
   connection.query(query, (err) => {
     if (err) res.status(500).json(err);
     else res.status(500).json("Deleted Artwork successfully....");
