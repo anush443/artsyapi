@@ -45,14 +45,14 @@ router.put("/update/:id", verifyTokenAndAuthorization, (req, res) => {
 
 //delete cart
 router.delete("/delete/:id", verifyTokenAndAuthorization, (req, res) => {
-  console.log("yes");
+  //console.log("yes");
   const query = `DELETE FROM cart WHERE userid = ${req.params.id} and art_id = '${req.body.art_id}';`;
-  console.log(query);
+  //console.log(query);
   connection.query(query, (err) => {
     if (err) return res.status(500).json(err);
-    else console.log("Deleted from cart...");
-    return;
-    // res.status(200).json("Deleted cart...");
+    else return res.status(200).json("Deleted cart...");
+
+    //
   });
 });
 

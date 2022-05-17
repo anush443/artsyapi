@@ -9,6 +9,7 @@ const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
 const exhibitionRoute = require("./routes/exhibition");
 const exhibitionCartRoute = require("./routes/exhibitionCart");
+const paymentRoute = require("./routes/payment");
 
 global.connection = mysql.createConnection({
   host: process.env.HOST,
@@ -25,6 +26,7 @@ app.use("/api/artworks", productRoute);
 app.use("/api/exhibitions", exhibitionRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/exhibitioncart", exhibitionCartRoute);
+app.use("/api/payment", paymentRoute);
 
 // app.get("/api/users/user", (req, res) => {
 //   connection.query("SELECT * FROM CustomerInformation", (err, result) => {
