@@ -5,7 +5,6 @@ const router = require("express").Router();
 router.post("/addartwork", verifyTokenAndAdmin, (req, res) => {
   const newArtwork = {
     artist_id: req.body.artist_id,
-    id: req.body.id,
     price: req.body.price,
     category: req.body.category,
     img: req.body.img,
@@ -14,9 +13,9 @@ router.post("/addartwork", verifyTokenAndAdmin, (req, res) => {
     title: req.body.title,
   };
 
-  const query = `INSERT INTO ArtworkInformation(id,price,category,img,art_description,size,title,artist_id) VALUES
-  ('${newArtwork.id}',${newArtwork.price},'${newArtwork.category}','${newArtwork.img}','${newArtwork.description}','${newArtwork.size}','${newArtwork.title}',${newArtwork.artist_id});`;
-  console.log(query);
+  const query = `INSERT INTO ArtworkInformation(price,category,img,art_description,size,title,artist_id) VALUES
+  (${newArtwork.price},'${newArtwork.category}','${newArtwork.img}','${newArtwork.description}','${newArtwork.size}','${newArtwork.title}',${newArtwork.artist_id});`;
+  //console.log(query);
   connection.query(query, (err) => {
     if (err) res.status(500).json(err);
     else res.status(200).json("New Artwork added...");
@@ -56,6 +55,25 @@ router.get("/", (req, res) => {
       else res.status(200).json(artwork);
     });
   }
+});
+
+//update artwork
+router.put("/update/:id", verifyTokenAndAdmin, (req, res) => {
+  const update = req.body;
+  console.log(update);
+  //console.log(update.category);
+  const query =
+    `Update ArtworkInformation SET ` +
+    Object.keys(update)
+      .map((key) => `${key} = ${update[`${key}`]}`)
+      .join(", ") +
+    ` WHERE id = ${req.params.id};`;
+  console.log(query);
+
+  connection.query(query, (err) => {
+    if (err) return res.status(500).json(err);
+    else res.status(200).json("Artwork updated...");
+  });
 });
 
 //create newArtist
@@ -103,7 +121,7 @@ router.get("/allartists", verifyTokenAndAdmin, (req, res) => {
 
 //update artist
 router.put("/updateartist/:artist_id", verifyTokenAndAdmin, (req, res) => {
-  const sql = `UPDATE ArtistInformation SET artist_name='${req.body.name}',email = '${req.body.email}',phone = '${req.body.phone}' WHERE artist_id='${req.params.artist_id}'`;
+  const sql = `UPDATE ArtistInformation SET artist_name = '${req.body.name}',email = '${req.body.email}',phone = '${req.body.phone}' WHERE artist_id='${req.params.artist_id}'`;
   // const sql=`UPDATE ArtistInformation SET artist_name= "james Bond",email = "james@gmail.com",phone = "23455533344" WHERE artist_id="1"`;
   connection.query(sql, (err, result) => {
     if (err) throw err;
@@ -122,25 +140,6 @@ router.delete("/delete/artist/:id", verifyTokenAndAdmin, (req, res) => {
   connection.query(query, (err) => {
     if (err) res.status(500).json(err);
     else res.status(500).json("Deleted Artist successfully....");
-  });
-});
-
-//update artwork
-router.put("/update/:id", verifyTokenAndAdmin, (req, res) => {
-  const update = req.body;
-  console.log(update);
-  //console.log(update.category);
-  const query =
-    `Update ArtworkInformation SET ` +
-    Object.keys(update)
-      .map((key) => `${key} = '${update[`${key}`]}'`)
-      .join(", ") +
-    ` WHERE id = '${req.params.id}';`;
-  console.log(query);
-  console.log(query);
-  connection.query(query, (err) => {
-    if (err) return res.status(500).json(err);
-    else res.status(200).json("Artwork updated...");
   });
 });
 

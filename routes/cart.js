@@ -14,7 +14,7 @@ router.post("/", verifyToken, (req, res) => {
 
   const query = `INSERT INTO cart(userid,art_id,quantity,total_price) VALUES(${
     cart.userid
-  },'${cart.art_id}',${cart.quantity},${cart.price * cart.quantity})`;
+  },${cart.art_id},${cart.quantity},${cart.price * cart.quantity})`;
   //console.log(query);
   connection.query(query, (err) => {
     if (err) res.sendStatus(500).json(err);
