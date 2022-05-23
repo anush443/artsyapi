@@ -4,7 +4,6 @@ const mysql = require("mysql2");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
 const userRoute = require("./routes/user");
-
 const authRoute = require("./routes/auth");
 const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
@@ -12,6 +11,8 @@ const exhibitionRoute = require("./routes/exhibition");
 const exhibitionCartRoute = require("./routes/exhibitionCart");
 const customerRoute = require("./routes/customer");
 const paymentRoute = require("./routes/payment");
+const ordersRoute = require("./routes/orders");
+const ticketsRoute = require("./routes/tickets");
 
 global.connection = mysql.createConnection({
   host: process.env.HOST,
@@ -30,6 +31,8 @@ app.use("/api/cart", cartRoute);
 app.use("/api/exhibitioncart", exhibitionCartRoute);
 app.use("/api/customer", customerRoute);
 app.use("/api/payment", paymentRoute);
+app.use("/api/orders", ordersRoute);
+app.use("/api/tickets", ticketsRoute);
 
 // app.get("/api/users/user", (req, res) => {
 //   connection.query("SELECT * FROM CustomerInformation", (err, result) => {
