@@ -60,8 +60,10 @@ router.get("/", verifyTokenAndAdmin, (req, res) => {
 
 router.get("/stats", verifyTokenAndAdmin, (req, res) => {
   const query = `SELECT COUNT(*) FROM USERLOGIN WHERE isAdmin = 0;`;
+  //console.log(query);
   connection.query(query, (err, count) => {
     if (count) {
+      // console.log(count[0]["COUNT(*)"]);
       res.status(200).json(count[0]["COUNT(*)"]);
     } else res.status(500).json(err);
   });

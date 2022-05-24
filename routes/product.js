@@ -57,22 +57,42 @@ router.get("/", (req, res) => {
   }
 });
 
+// //update artwork
+// router.put("/update/:id", verifyTokenAndAdmin, (req, res) => {
+//   const update = req.body;
+//   console.log(update);
+//   //console.log(update.category);
+//   const query =
+//     `Update ArtworkInformation SET ` +
+//     Object.keys(update)
+//       .map((key) => `${key} = ${update[`${key}`]}`)
+//       .join(", ") +
+//     ` WHERE id = ${req.params.id};`;
+//   console.log(query);
+
+//   connection.query(query, (err) => {
+//     if (err) return res.status(500).json(err);
+//     else res.status(200).json("Artwork updated...");
+//   });
+// });
+
 //update artwork
 router.put("/update/:id", verifyTokenAndAdmin, (req, res) => {
-  const update = req.body;
-  console.log(update);
-  //console.log(update.category);
-  const query =
-    `Update ArtworkInformation SET ` +
-    Object.keys(update)
-      .map((key) => `${key} = ${update[`${key}`]}`)
-      .join(", ") +
-    ` WHERE id = ${req.params.id};`;
-  console.log(query);
-
+  const query = `Update artworkinformation set price = ${req.body.price} , title = '${req.body.title}' , art_description = '${req.body.art_description}' where id = ${req.params.id};`;
+  //console.log(query);
   connection.query(query, (err) => {
     if (err) return res.status(500).json(err);
-    else res.status(200).json("Artwork updated...");
+    else return res.status(200).json({ message: 1 });
+  });
+});
+
+//update stock
+router.put("/updatestock/:id", verifyTokenAndAdmin, (req, res) => {
+  const query = `Update artworkinformation set  instock  = ${req.body.instock} where id = ${req.params.id};`;
+  //console.log(query);
+  connection.query(query, (err) => {
+    if (err) return res.status(500).json(err);
+    else return res.status(200).json({ message: 1 });
   });
 });
 

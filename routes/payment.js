@@ -56,4 +56,17 @@ router.post("/:id", verifyTokenAndAuthorization, (req, res) => {
   });
 });
 
+router.get("/allpayments", verifyTokenAndAuthorization, (req, res) => {
+  const query = `call all_payments();`;
+
+  //console.log(query);
+  connection.query(query, (err, allPayments) => {
+    if (err) res.status(500).json(err);
+    else {
+      //console.log(allPayments[0]);
+      res.status(200).json(allPayments[0]);
+    }
+  });
+});
+
 module.exports = router;
